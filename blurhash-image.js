@@ -49,14 +49,14 @@
       for (let i = 0; i < numX * numY; i++) {
         colors[i] = i
           ? ((box = decode83(blurhash.slice(4 + i * 2, 6 + i * 2))),
-            [(box / (19 * 19)) | 0, ((box / 19) | 0) % 19, box % 19, n255]
+            [(box / (19 * 19)) | 0, ((box / 19) | 0) % 19, box % 19]
               .map((x) => (x - 9) / 9)
               .map((val) => sign(val) * val ** 2 * maximumValue))
           : ((box = decode83(blurhash.slice(2, 6))),
-            [box >> 16, (box >> 8) & n255, box & n255, n255].map(
+            [box >> 16, (box >> 8) & n255, box & n255].map(
               (x) => (
                 (box = x / n255),
-                box <= 4 / 99 ? box / n12_92 : ((box + n0_055) / n1_055) ** 2.4
+                box <= 0.4 ? box / n12_92 : ((box + n0_055) / n1_055) ** 2.4
               )
             ));
         colors[i][3] = 1;
