@@ -1,51 +1,49 @@
 // This outer block is used to ensure terser mangles the variable names.
 {
-  // Variables for reused numbers saves some characters
-  let n12_92 = 12;
-  let n255 = 255;
-  let n0_055 = 0.055;
-  let n1_055 = 1 + n0_055;
-
-  // Destructuring `Math` saves some characters to use common functions,
-  let { max, min, PI, cos, round, sign } = Math;
-
-  // `box` stores a temporary value used later, but due to singlethreadedness, this is never
-  // overwritten when it is still needed. it saves a couple characters instead of defining more than one variable.
-  let box;
-
-  // `decode83` decodes base83, which is a part of the blurhash spec. it is done in one line
-  // using a reduce function to avoid a for-loop
-  let decode83 = (str) =>
-    [...str].reduce(
-      (value, char) =>
-        value * 83 +
-        // i wish this giant string could get compressed. i tried.
-        // number of hours spent here: 1
-        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~" //
-          .indexOf(char),
-      0
-    );
-
   class BlurhashImageElement extends HTMLElement {
-    connectedCallback() {
-      // Shoving all the variable declarations here lets the minifier group them together into one
-      // variable declaration statement.
-      let blurhash = this.getAttribute("blurhash");
-      let canvas = document.createElement("canvas");
-      let ctx = canvas.getContext("2d");
-      let sizeFlag = decode83(blurhash[0]);
-      let numY = ((sizeFlag / 9) | 0) + 1;
-      let numX = (sizeFlag % 9) + 1;
-      let maximumValue = (decode83(blurhash[1]) + 1) / 166;
-      let colors = [];
-      let pixels = new Uint8Array(8 * 8 * 4);
-      let indexOfPixelArr = 0;
-      let imageData = ctx.createImageData(
-        8,
-        (canvas.width = canvas.height = 8)
-      );
-      let y, x, j, i;
-
+    // all of the logic happens in connectedCallback, so it ended up being best to throw ALL the code
+    // in here as well, as it saves space for variable declarations
+    connectedCallback(
+      // `box` stores a temporary value used later, but due to singlethreadedness, this is never
+      // overwritten when it is still needed. it saves a couple characters instead of defining more than one variable.
+      box,
+      // Variables for reused numbers saves some characters
+      n12_92 = 12,
+      n255 = 255,
+      n0_055 = 0.055,
+      n1_055 = 1 + n0_055,
+      // Destructuring `Math` saves some characters to use common functions,
+      { max, min, PI, cos, round, sign } = Math,
+      // `decode83` decodes base83, which is a part of the blurhash spec. it is done in one line
+      // using a reduce function to avoid a for-loop
+      decode83 = (str) =>
+        [...str].reduce(
+          (value, char) =>
+            value * 83 +
+            // i wish this giant string could get compressed. i tried.
+            // number of hours spent here: 1
+            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~" //
+              .indexOf(char),
+          0
+        ),
+      // the rest of these use to be inline variable declarations, but they are now inlined in the
+      // parameter list, so "let " is no longer needed.
+      blurhash = this.getAttribute("blurhash"),
+      canvas = document.createElement("canvas"),
+      ctx = canvas.getContext("2d"),
+      sizeFlag = decode83(blurhash[0]),
+      numY = ((sizeFlag / 9) | 0) + 1,
+      numX = (sizeFlag % 9) + 1,
+      maximumValue = (decode83(blurhash[1]) + 1) / 166,
+      colors = [],
+      pixels = new Uint8Array(8 * 8 * 4),
+      indexOfPixelArr = 0,
+      imageData = ctx.createImageData(8, (canvas.width = canvas.height = 8)),
+      y,
+      x,
+      j,
+      i
+    ) {
       // box's value is used to store the decoded base83
 
       for (i = 0; i < numX * numY; i++) {
@@ -103,9 +101,12 @@
         }
       }
 
+      // two method calls that happen BEFORE the assignment are inside of the parameter
+      // of this function, which saves 1 character. yeah this is stupid at this point, but funny.
       imageData.data.set(pixels);
-      ctx.putImageData(imageData, 0, 0);
-      this.style.background = `url("${canvas.toDataURL()}")0 0/100%`;
+      this.style.background = `url(${canvas.toDataURL(
+        ctx.putImageData(imageData, 0, 0)
+      )})0 0/100%`;
     }
 
     // Attribute modification defense part 1:

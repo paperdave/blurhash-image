@@ -8,7 +8,7 @@ note that this is **only** the blurhash component and doesn't handle displaying 
 
 ## install
 
-because this is intended to be embedded into EVERY page, i wanted it to be as small as possible, so i present a manual assisted **1132 byte** minification. it's on npm, or inside of blurhash-image.min.js, or pasted below
+because this is intended to be embedded into EVERY page, i wanted it to be as small as possible, so i present a manual assisted **1088 byte** minification. it's on npm, or inside of blurhash-image.min.js, or pasted below
 
 ```sh
 npm install blurhash-image
@@ -43,7 +43,7 @@ a full example of using this is [the BlurHash component on davecode.net](https:/
 
 ## further minification
 
-if you want to, go ahead; tell me if you get it any smaller without losing functionality, that wouldn be cool.
+if you want to, go ahead; tell me if you get it any smaller without losing functionality, that would be cool. in a sort of way, this is a fun code golfing challenge, but with an actual use. ... well beyond this point saves no percivable time, but its fun to think about.
 
 ## license
 

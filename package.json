@@ -1,7 +1,7 @@
 {
   "name": "blurhash-image",
-  "version": "1.0.0",
-  "description": "1.2kb inlinable script to easily embed blurhashes in a website",
+  "version": "1.0.01",
+  "description": "1.09kb inlinable script to easily embed blurhashes in a website",
   "main": "index.js",
   "module": "index.mjs",
   "types": "index.d.ts",
