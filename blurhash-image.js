@@ -40,14 +40,20 @@
       let colors = [];
       let pixels = new Uint8Array(8 * 8 * 4);
       let indexOfPixelArr = 0;
-      let imageData = ctx.createImageData(8, 8);
-
-      canvas.width = canvas.height = 8;
+      let imageData = ctx.createImageData(
+        8,
+        (canvas.width = canvas.height = 8)
+      );
+      let y, x, j, i;
 
       // box's value is used to store the decoded base83
 
-      for (let i = 0; i < numX * numY; i++) {
-        colors[i] = i
+      for (i = 0; i < numX * numY; i++) {
+        // this array is set to a pixel color (rgba array)
+        // but the A is always 1, so we wrap the entire assignment in *another* assignment
+        // and set it to 1, which affects only the last value.
+
+        (colors[i] = i
           ? ((box = decode83(blurhash.slice(4 + i * 2, 6 + i * 2))),
             [(box / (19 * 19)) | 0, ((box / 19) | 0) % 19, box % 19]
               .map((x) => (x - 9) / 9)
@@ -58,22 +64,26 @@
                 (box = x / n255),
                 box <= 0.4 ? box / n12_92 : ((box + n0_055) / n1_055) ** 2.4
               )
-            ));
-        colors[i][3] = 1;
+            )))[3] = 1;
       }
 
       // box's value is now used to store a pixel color
 
-      for (let y = 0; y < 8; y++) {
-        for (let x = 0; x < 8; x++) {
+      for (y = 0; y < 8; y++) {
+        for (x = 0; x < 8; x++) {
           box = [0, 0, 0, 1];
 
           // I forgot how this works, but it seems to grab every color blob
           // and average it out to where the pixel is.
-          for (let j = 0; j < numY; j++) {
-            for (let i = 0; i < numX; i++) {
-              let basis = cos((PI * x * i) / 8) * cos((PI * y * j) / 8);
-              box = box.map((x, v) => x + colors[i + j * numX][v] * basis);
+          for (j = 0; j < numY; j++) {
+            for (i = 0; i < numX; i++) {
+              box = box.map(
+                (z, v) =>
+                  z +
+                  colors[i + j * numX][v] *
+                    cos((PI * x * i) / 8) *
+                    cos((PI * y * j) / 8)
+              );
             }
           }
 
