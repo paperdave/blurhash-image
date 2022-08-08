@@ -37,7 +37,8 @@ when using, you simply just include this in your markup:
 
 note that this only generates the image itself, and you will need to add your own styles to make it the right size and aspect ratio. see the `width`, `height` and `aspect-ratio` css properties.
 
-a full example of using this is [the BlurHash component on davecode.net](https://github.com/davecaruso/davecode.net/blob/main/src/lib/components/BlurHash.svelte) which handles swapping from it to a real image but only if it is loaded, and includes a fade animation.
+- simple usage example in svelte: [my old BlurHash.svelte component](https://github.com/paperdave/paperdave.net/blob/f18c382f8b9bfe81474eb637701edfeb7b9e5f4a/src/lib/components/BlurHash.svelte), which handles displaying the canvas and swapping to the real image once it loads.
+- advanced example: [the `Img.svelte` component on paperdave.net](https://github.com/paperdave/paperdave.net/blob/4b461f299cb87a43fa1bd828fffb6c57fc163dc4/src/lib/components/Img.svelte). I edited my initial implementation to handle a lot more things; however the old component is good for learning how to use `blurhash-image`, but this component is more full and handles all my personal needs. It uses a custom encoding for the image urls so that they can embed aspect ratios, the blurhash string, and the url, in almost less text that the expanded url alone would actually be (For example `e1501dacd5986dd333f58f7901e90e31/4/L5D,Q3Ey,Mbd|QwJFUxD5}JQ#@bJ`). Leaving this component for any inspiration on how blurhashes can be pushed to the limit.
 
 ## further minification
 
